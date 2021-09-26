@@ -107,6 +107,7 @@ function pregameRender() {
     numberOfTeams = this.value;
     document.getElementById("teamCount").innerHTML = numberOfTeams;
   };
+  
 }
 
 //render function
@@ -185,7 +186,14 @@ function timerUpdate() {
 }
 
 function numberConfirm() {
-  let inputNumber = document.querySelector("#entryBox").value;
+  let inputNumber
+  try {
+    inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+  }
+  catch(err) {
+    inputNumber = 0;
+  }
+  console.log(inputNumber)
   if (
     inputNumber % 1 === 0 &&
     inputNumber > 0 &&
@@ -203,15 +211,12 @@ function numberConfirm() {
         (turn % numOfTeams) + 1
       } Wins!`);
     }
-    turn++;
     timer = 0;
     entryBox.value = "";
     diceBox.innerHTML = `<h1>Roll to Start</h1>`;
     render();
   }
-  if (timer <= 0) {
     turn++;
-  }
   document.querySelector("#entryBox").value = "";
 }
 
@@ -238,7 +243,7 @@ function updateDirection(id, distance, direction, possibleCallback) {
 function update(id) {
   //Check up:
   updateDirection(id, -10, "up", (x) => x > 10);
-  //Check up:
+  //Check down:
   updateDirection(id, 10, "up", (x) => x < 91);
   //Check left:
   updateDirection(id, -1, "left", (x) => x % 10 !== 1);
@@ -262,7 +267,5 @@ function checkWin(id) {
   }
   return false;
 }
-
-/////CREATE A FUNCTION THAT RESETS THE DICE TO "ROLL THE DICE OR WHATEVER. ADD IT TO WHEN THE TIMER HITS 0"
 
 pregameRender();
