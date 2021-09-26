@@ -95,6 +95,7 @@ function initialize() {
   confirm.addEventListener("click", numberConfirm);
   document.querySelector("#entry").appendChild(confirm);
   diceBox.innerHTML = `<h1>Roll to Start</h1>`;
+  diceBox.classList.add('pulsate');
   render();
   makeBoard();
 }
@@ -141,6 +142,7 @@ function rollDice() {
       let num = makeDie(roll, i);
       diceBox.appendChild(num);
     }
+    diceBox.classList.remove('pulsate');
     timer = 4 * 60000;
     timerUpdate();
   }
@@ -182,6 +184,9 @@ function timerUpdate() {
       timer -= 1000;
       timerUpdate();
     }, 1000);
+  }
+  if (timer === 0) {
+  initialize();
   }
 }
 
