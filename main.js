@@ -72,7 +72,7 @@ let numOfTeams,
   isTimerStopped;
 
 //cache elements
-const diceBox = document.querySelector("#dice");
+const diceContainer = document.querySelector("#dice");
 const colorBox = document.querySelector("#colors");
 
 //event listeners
@@ -80,26 +80,43 @@ document
   .querySelector("#teamCountConfirm")
   .addEventListener("click", teamConfirm);
 
-diceBox.addEventListener("click", rollDice);
+diceContainer.addEventListener("click", rollDice);
 
 //functions
+//init function
 function initialize() {
   turn = 0;
   timer = 0;
+  const firstDiv = document.createElement("div");
+  const secondDiv = document.createElement("div");
   const entryBox = document.createElement("input");
   entryBox.setAttribute("id", "entryBox");
-  document.querySelector("#entry").appendChild(entryBox);
-  const confirm = document.createElement("button");
-  confirm.textContent = "Confirm";
-  confirm.setAttribute("id", "confirmButton");
-  confirm.addEventListener("click", numberConfirm);
-  document.querySelector("#entry").appendChild(confirm);
-  diceBox.innerHTML = `<h1>Roll to Start</h1>`;
-  diceBox.classList.add('pulsate');
+  firstDiv.appendChild(entryBox);
+  // document.querySelector("#entry").appendChild(entryBox);
+  const evaluate = document.createElement("button");
+  evaluate.textContent = "Evaluate";
+  evaluate.setAttribute("id", "evaluateButton");
+  evaluate.addEventListener("click", numberEvaluate);
+  // document.querySelector("#entry").appendChild(evaluate);
+  firstDiv.appendChild(evaluate);
+  const error = document.createElement("span");
+  error.setAttribute("id", "errorField");
+  secondDiv.appendChild(error);
+  // document.querySelector("#entry").appendChild(error);
+  const submit = document.createElement("button");
+  submit.textContent = "Submit";
+  submit.setAttribute("id", "submitButton");
+  submit.addEventListener("click", numberSubmit);
+  submit.style = "display:none;";
+
+  secondDiv.appendChild(submit);
+
+  document.querySelector("#entry").appendChild(firstDiv);
+  document.querySelector("#entry").appendChild(secondDiv);
+
   render();
   makeBoard();
 }
-//init function
 
 function pregameRender() {
   let numberOfTeams = document.querySelector("#numberOfTeams").value;
@@ -108,16 +125,22 @@ function pregameRender() {
     numberOfTeams = this.value;
     document.getElementById("teamCount").innerHTML = numberOfTeams;
   };
-  
 }
 
 //render function
 function render() {
+  const rollButton = document.createElement("button");
+  rollButton.textContent = "Roll to Start";
+  rollButton.id = "rollButton";
+  rollButton.classList.add("pulsate");
+  diceContainer.prepend(rollButton);
   colorBox.innerHTML = "";
+  document.getElementById("errorField").textContent = "";
   for (let i = 0; i < numOfTeams; i++) {
     let row = document.createElement("div");
     row.textContent = `Team ${i + 1}`;
     row.style.backgroundColor = teamColors[i];
+    row.style.width = "100%";
     if ((turn - i) % numOfTeams === 0) {
       row.style.border = "2pt solid black";
       row.style.fontSize = "20pt";
@@ -134,15 +157,17 @@ function makeDie(num, position) {
 
 function rollDice() {
   if (timer <= 0) {
-    diceBox.innerHTML = "";
+    diceContainer.removeChild(rollButton);
+    const diceBox = document.createElement("div");
+    diceBox.id = "diceBox";
+    diceContainer.appendChild(diceBox);
     currentRoll.length = 0;
     for (let i = 1; i <= 4; i++) {
       let roll = 1 + Math.floor(Math.random() * 6);
       currentRoll.push(roll);
-      let num = makeDie(roll, i);
-      diceBox.appendChild(num);
+      let die = makeDie(roll, i);
+      diceBox.appendChild(die);
     }
-    diceBox.classList.remove('pulsate');
     timer = 4 * 60000;
     timerUpdate();
   }
@@ -186,43 +211,76 @@ function timerUpdate() {
     }, 1000);
   }
   if (timer === 0) {
-  initialize();
+    diceContainer.removeChild(diceBox);
+    render();
   }
 }
 
-function numberConfirm() {
-  let inputNumber
-  try {
-    inputNumber = math.evaluate(document.querySelector("#entryBox").value);
-  }
-  catch(err) {
-    inputNumber = 0;
-  }
-  console.log(inputNumber)
-  if (
-    inputNumber % 1 === 0 &&
-    inputNumber > 0 &&
-    inputNumber < 101 &&
-    !Object.keys(playedNumbers).includes(`#box${inputNumber}`) &&
-    timer > 0
-  ) {
-    let played = new PlayedSquare(`#box${inputNumber}`, turn % numOfTeams);
-    playedNumbers[played.id] = played;
-    document.querySelector(`#box${inputNumber}`).style.backgroundColor =
-      teamColors[turn % numOfTeams];
-    update(inputNumber);
-    if (checkWin(inputNumber)) {
-      return (document.body.innerHTML = `<h1>Team ${
-        (turn % numOfTeams) + 1
-      } Wins!`);
+function numberEvaluate() {
+  let inputValue, inputNumber;
+  document.getElementById("errorField").textContent = "";
+  if (timer > 0) {
+    try {
+      inputValue = document.querySelector("#entryBox").value;
+      inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+    } catch (err) {
+      inputNumber = null;
     }
-    timer = 0;
-    entryBox.value = "";
-    diceBox.innerHTML = `<h1>Roll to Start</h1>`;
-    render();
+    if (inputNumber === undefined) {
+      document.getElementById("errorField").textContent =
+        "You must enter a number";
+    } else if (inputNumber === null) {
+      document.getElementById("errorField").textContent = 
+      "Cannot evaluate";
+    } else if (inputNumber % 1 !== 0) {
+      document.getElementById(
+        "errorField"
+      ).textContent = `${inputNumber} is not a whole number`;
+    } else if (inputNumber < 1 || inputNumber > 100) {
+      document.getElementById(
+        "errorField"
+      ).textContent = `${inputNumber} must be between 1 and 100`;
+    } else if (Object.keys(playedNumbers).includes(`#box${inputNumber}`)) {
+      document.getElementById(
+        "errorField"
+      ).textContent = `${inputNumber} has already been played`;
+    } else if (
+      inputValue.match(/(?<!\d)\d(?!\d)/gm).sort().join("") !==
+      [...currentRoll].sort().join("")
+    ) {
+      document.getElementById(
+        "errorField"
+      ).textContent = `You must use only and all the numbers ${currentRoll.join(
+        ", "
+      )}`;
+    } else {
+      document.getElementById(
+        "errorField"
+      ).textContent = `Would you like to submit ${inputNumber}?`;
+      document.getElementById("submitButton").style = "display:inline;";
+    }
   }
-    turn++;
+}
+
+function numberSubmit() {
+  let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+  let played = new PlayedSquare(`#box${inputNumber}`, turn % numOfTeams);
+  playedNumbers[played.id] = played;
+  document.querySelector(`#box${inputNumber}`).style.backgroundColor =
+    teamColors[turn % numOfTeams];
+  update(inputNumber);
+  if (checkWin(inputNumber)) {
+    return (document.body.innerHTML = `<h1>Team ${
+      (turn % numOfTeams) + 1
+    } Wins!`);
+  }
+  timer = 0;
   document.querySelector("#entryBox").value = "";
+  turn++;
+  diceContainer.removeChild(document.getElementById("diceBox"));
+  document.getElementById("submitButton").style = "display:none;";
+  document.getElementById("timer").textContent = "";
+  render();
 }
 
 function updateDirection(id, distance, direction, possibleCallback) {

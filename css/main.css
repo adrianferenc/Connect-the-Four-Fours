@@ -9,7 +9,7 @@ body {
 }
 
 #colors {
-  display: flexbox;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -17,9 +17,32 @@ body {
   color: white;
 }
 
+#slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #dice {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+}
+
+#diceBox {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+}
+
+#entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  margin: 1rem 0;
 }
 
 .die {
@@ -42,6 +65,7 @@ body {
   border: 3pt solid black;
   width: 700px;
   height: 700px;
+  margin-top: 1rem;
 }
 
 .box {
@@ -53,17 +77,28 @@ body {
 
 .pulsate {
   -webkit-animation: pulsate 1s ease-out;
-  -webkit-animation-iteration-count: infinite; 
+  -webkit-animation-iteration-count: infinite;
   opacity: 0.5;
 }
 @-webkit-keyframes pulsate {
-  0% { 
-      opacity: 0.5;
+  0% {
+    opacity: 0.5;
   }
-  50% { 
-      opacity: 1.0;
+  50% {
+    opacity: 1;
   }
-  100% { 
-      opacity: 0.5;
+  100% {
+    opacity: 0.5;
   }
+}
+
+#rollButton {
+  width: 100%;
+}
+
+#timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
 }
