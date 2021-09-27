@@ -136,6 +136,7 @@ function render() {
   diceContainer.prepend(rollButton);
   colorBox.innerHTML = "";
   document.getElementById("errorField").textContent = "";
+  document.getElementById("entry").setAttribute("visibility", "hidden");
   for (let i = 0; i < numOfTeams; i++) {
     let row = document.createElement("div");
     row.textContent = `Team ${i + 1}`;
@@ -158,6 +159,7 @@ function makeDie(num, position) {
 function rollDice() {
   if (timer <= 0) {
     diceContainer.removeChild(rollButton);
+    document.getElementById("entry").setAttribute("visibility", "visible");
     const diceBox = document.createElement("div");
     diceBox.id = "diceBox";
     diceContainer.appendChild(diceBox);
@@ -211,6 +213,22 @@ function timerUpdate() {
     }, 1000);
   }
   if (timer === 0) {
+    let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+    let inputValue = document.querySelector("#entryBox").value;
+    if (
+      inputNumber % 1 === 0 &&
+      inputNumber < 101 &&
+      inputNumber > 0 &&
+      !Object.keys(playedNumbers).includes(`#box${inputNumber}`) &&
+      inputValue
+        .match(/(?<!\d)\d(?!\d)/gm)
+        .sort()
+        .join("") === [...currentRoll].sort().join("")
+    ) {
+      numberSubmit();
+    } else {
+      turn++;
+    }
     diceContainer.removeChild(diceBox);
     render();
   }
@@ -230,8 +248,7 @@ function numberEvaluate() {
       document.getElementById("errorField").textContent =
         "You must enter a number";
     } else if (inputNumber === null) {
-      document.getElementById("errorField").textContent = 
-      "Cannot evaluate";
+      document.getElementById("errorField").textContent = "Cannot evaluate";
     } else if (inputNumber % 1 !== 0) {
       document.getElementById(
         "errorField"
@@ -245,8 +262,10 @@ function numberEvaluate() {
         "errorField"
       ).textContent = `${inputNumber} has already been played`;
     } else if (
-      inputValue.match(/(?<!\d)\d(?!\d)/gm).sort().join("") !==
-      [...currentRoll].sort().join("")
+      inputValue
+        .match(/(?<!\d)\d(?!\d)/gm)
+        .sort()
+        .join("") !== [...currentRoll].sort().join("")
     ) {
       document.getElementById(
         "errorField"
