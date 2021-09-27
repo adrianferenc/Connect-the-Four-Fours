@@ -83,8 +83,8 @@ diceContainer.addEventListener("click", rollDice);
 
 document.querySelector("#timeAmount").addEventListener("change", (e) => {
   e.target.value <= 0
-    ? document.querySelector("#start").disabled = true
-    : document.querySelector("#start").disabled = false
+    ? (document.querySelector("#start").disabled = true)
+    : (document.querySelector("#start").disabled = false);
 });
 
 //functions
