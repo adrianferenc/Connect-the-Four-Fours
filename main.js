@@ -69,6 +69,7 @@ let numOfTeams,
   timer,
   minute,
   second,
+  time,
   isTimerStopped;
 
 //cache elements
@@ -76,11 +77,15 @@ const diceContainer = document.querySelector("#dice");
 const colorBox = document.querySelector("#colors");
 
 //event listeners
-document
-  .querySelector("#teamCountConfirm")
-  .addEventListener("click", teamConfirm);
+document.querySelector("#start").addEventListener("click", startGame);
 
 diceContainer.addEventListener("click", rollDice);
+
+document.querySelector("#timeAmount").addEventListener("change", (e) => {
+  e.target.value <= 0
+    ? document.querySelector("#start").disabled = true
+    : document.querySelector("#start").disabled = false
+});
 
 //functions
 //init function
@@ -170,7 +175,7 @@ function rollDice() {
       let die = makeDie(roll, i);
       diceBox.appendChild(die);
     }
-    timer = 4 * 60000;
+    timer = time * 60000;
     timerUpdate();
   }
 }
@@ -191,8 +196,9 @@ function makeBoard() {
   document.querySelector("#futureBoard").appendChild(board);
 }
 
-function teamConfirm() {
+function startGame() {
   numOfTeams = document.querySelector("#numberOfTeams").value;
+  time = +document.querySelector("#timeAmount").value;
   document.body.removeChild(document.querySelector("#pregame"));
   initialize();
 }
