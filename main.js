@@ -304,7 +304,10 @@ function numberSubmit() {
   if (checkWin(inputNumber)) {
     return (document.body.innerHTML = `<h1>Team ${
       (turn % numOfTeams) + 1
-    } Wins!`);
+    } Wins!</h1>
+    
+    <button class="btn btn-warning btn-lg" onClick = "window.location.reload()">Play Again</button>
+    `);
   }
   timer = 0;
   document.querySelector("#entryBox").value = "";
