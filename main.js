@@ -225,8 +225,18 @@ function timerUpdate() {
     }, 1000);
   }
   if (timer === 0) {
-    let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
     let inputValue = document.querySelector("#entryBox").value;
+    let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+    if (inputValue.includes("log")) {
+      let inputValueWithLog = document.querySelector("#entryBox").value;
+      for (let i = 1; i < 15; i++) {
+        inputValueWithLog = inputValueWithLog.replace(
+          /(?<=log\(.{1})\)/g,
+          ",10)"
+        );
+      }
+      inputNumber = math.evaluate(inputValueWithLog);
+    }
     if (
       inputNumber % 1 === 0 &&
       inputNumber < 101 &&
@@ -253,6 +263,15 @@ function numberEvaluate() {
     try {
       inputValue = document.querySelector("#entryBox").value;
       inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+      if (inputValue.includes("log")) {
+        const matchLength = document
+          .querySelector("#entryBox")
+          .value.match(/(?<=log\().+?(?=\))/g)[0].length;
+        const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
+        inputNumber = math.evaluate(
+          document.querySelector("#entryBox").value.replace(re, `,10`)
+        );
+      }
     } catch (err) {
       inputNumber = null;
     }
@@ -295,6 +314,15 @@ function numberEvaluate() {
 
 function numberSubmit() {
   let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+  if (document.querySelector("#entryBox").value.includes("log")) {
+    const matchLength = document
+      .querySelector("#entryBox")
+      .value.match(/(?<=log\().+?(?=\))/g)[0].length;
+    const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
+    inputNumber = math.evaluate(
+      document.querySelector("#entryBox").value.replace(re, `,10`)
+    );
+  }
   let played = new PlayedSquare(`#box${inputNumber}`, turn % numOfTeams);
   playedNumbers[played.id] = played;
   document.querySelector(`#box${inputNumber}`).style.color = "white";

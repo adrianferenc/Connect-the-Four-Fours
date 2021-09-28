@@ -5,7 +5,7 @@ body {
 }
 
 footer {
-  margin-top: 50%;
+  margin-top: 40%;
 }
 
 #pregame {
@@ -15,12 +15,18 @@ footer {
   justify-content: space-evenly;
 }
 
+#title{
+  margin-bottom: 3rem;
+}
+
 #header {
-  display: grid;
-  grid-template-columns: 100px auto 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #colors {
+  width: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,16 +100,17 @@ footer {
   grid-template: auto auto auto auto auto auto auto auto auto auto / auto auto auto auto auto auto auto auto auto auto;
   text-align: center;
   border: 3pt solid black;
-  width: 700px;
-  height: 700px;
+  width: 100%;
+  height: 100%;
   margin-top: 1rem;
 }
 
 .box {
   display: grid;
   border: 1pt solid black;
-  font-size: 32pt;
+  font-size: 2rem;
   align-items: center;
+  padding: 0 .5rem;
 }
 
 .pulsate {
@@ -125,10 +132,18 @@ footer {
   }
 }
 
+#dice {
+  width: 100%;
+  margin: 0 2rem;
+}
+
 #rollButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   font-size: 2.5rem;
-  margin: 0 2rem;
+  height: 4rem;
 }
 
 #timer {
@@ -136,4 +151,5 @@ footer {
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  margin-left: 1.5rem;
 }
