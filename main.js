@@ -11,7 +11,14 @@ class PlayedSquare {
   }
 }
 
-const teamColors = ["#231F20", "#BB4430", "#7EBDC2", "#F3DFA2", "#EFE6DD", "#04724D"];
+const teamColors = [
+  "#231F20",
+  "#BB4430",
+  "#7EBDC2",
+  "#F3DFA2",
+  "#EFE6DD",
+  "#04724D",
+];
 const dice = {
   die1: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-dice-1" viewBox="0 0 16 16">
   <circle cx="8" cy="8" r="1.5"/>
@@ -290,7 +297,7 @@ function numberSubmit() {
   let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
   let played = new PlayedSquare(`#box${inputNumber}`, turn % numOfTeams);
   playedNumbers[played.id] = played;
-  document.querySelector(`#box${inputNumber}`).style.color ="white";
+  document.querySelector(`#box${inputNumber}`).style.color = "white";
   document.querySelector(`#box${inputNumber}`).style.backgroundColor =
     teamColors[turn % numOfTeams];
   update(inputNumber);

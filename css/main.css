@@ -1,6 +1,11 @@
 body {
   display: grid;
   justify-content: center;
+  margin-top: 2rem;
+}
+
+footer {
+  margin-top: 50%;
 }
 
 #pregame {
@@ -62,7 +67,7 @@ body {
 }
 
 #timeAmount {
-  width: 2rem;
+  width: 3.1rem;
   margin-left: 1rem;
   text-align: center;
 }

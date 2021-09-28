@@ -19,23 +19,50 @@
   </head>
   <body>
     <div id="pregame">
-      <h1>Connect The Four Fours</h1>
-      <h2>How many teams are playing?</h2>
+      <h1 class="display-3 fw-normal">Connect The Four Fours</h1>
+      <h2  class="display-7 fw-light">How many teams are playing?</h2>
       <div id="slider">
         <input
           type="range"
           min="2"
           max="6"
           value="2"
-          class="slider"
+          class="form-range"
           id="numberOfTeams"
         />
         <p id="teamCount"></p>
         <div id="setTimer">
           <label for="timeAmount">Timer length (in minutes):</label>
-          <input id="timeAmount" type="number" value="4" />
+          <input
+            id="timeAmount"
+            class="form-control form-control-sm"
+            type="number"
+            value="4"
+          />
         </div>
         <button id="start" class="btn btn-warning btn-sm">Start</button>
+      </div>
+      <footer class="footer">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          How does the game work?
+        </button>        
+      </footer>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">How to Play Connect the Four Fours</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              On each turn 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div id="header">
