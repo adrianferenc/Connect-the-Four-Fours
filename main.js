@@ -11,7 +11,7 @@ class PlayedSquare {
   }
 }
 
-const teamColors = ["red", "blue", "yellow", "purple", "green", "orange"];
+const teamColors = ["#231F20", "#BB4430", "#7EBDC2", "#F3DFA2", "#EFE6DD", "#04724D"];
 const dice = {
   die1: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-dice-1" viewBox="0 0 16 16">
   <circle cx="8" cy="8" r="1.5"/>
@@ -95,22 +95,21 @@ function initialize() {
   const firstDiv = document.createElement("div");
   const secondDiv = document.createElement("div");
   const entryBox = document.createElement("input");
-  entryBox.setAttribute("id", "entryBox");
+  entryBox.id = "entryBox";
   firstDiv.appendChild(entryBox);
-  // document.querySelector("#entry").appendChild(entryBox);
   const evaluate = document.createElement("button");
   evaluate.textContent = "Evaluate";
-  evaluate.setAttribute("id", "evaluateButton");
+  evaluate.id = "evaluateButton";
+  evaluate.classList.add("btn", "btn-sm", "btn-warning");
   evaluate.addEventListener("click", numberEvaluate);
-  // document.querySelector("#entry").appendChild(evaluate);
   firstDiv.appendChild(evaluate);
   const error = document.createElement("span");
-  error.setAttribute("id", "errorField");
+  error.id = "errorField";
   secondDiv.appendChild(error);
-  // document.querySelector("#entry").appendChild(error);
   const submit = document.createElement("button");
   submit.textContent = "Submit";
-  submit.setAttribute("id", "submitButton");
+  submit.id = "submitButton";
+  submit.classList.add("btn", "btn-sm", "btn-success");
   submit.addEventListener("click", numberSubmit);
   submit.style = "display:none;";
 
@@ -137,7 +136,7 @@ function render() {
   const rollButton = document.createElement("button");
   rollButton.textContent = "Roll to Start";
   rollButton.id = "rollButton";
-  rollButton.classList.add("pulsate");
+  rollButton.classList.add("pulsate", "btn", "btn-sm", "btn-secondary");
   diceContainer.prepend(rollButton);
   colorBox.innerHTML = "";
   document.getElementById("errorField").textContent = "";
@@ -183,12 +182,12 @@ function rollDice() {
 function makeBoard() {
   document.querySelector("#futureBoard").innerHTML = "";
   let board = document.createElement("div");
-  board.setAttribute("id", "board");
+  board.id = "board";
   for (i = 0; i < 10; i++) {
     for (j = 1; j <= 10; j++) {
       let box = document.createElement("div");
-      box.setAttribute("class", "box");
-      box.setAttribute("id", `box${10 * i + j}`);
+      box.classList.add("box");
+      box.id = `box${10 * i + j}`;
       box.innerHTML = `<span>${10 * i + j}<span>`;
       board.appendChild(box);
     }
@@ -291,6 +290,7 @@ function numberSubmit() {
   let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
   let played = new PlayedSquare(`#box${inputNumber}`, turn % numOfTeams);
   playedNumbers[played.id] = played;
+  document.querySelector(`#box${inputNumber}`).style.color ="white";
   document.querySelector(`#box${inputNumber}`).style.backgroundColor =
     teamColors[turn % numOfTeams];
   update(inputNumber);
