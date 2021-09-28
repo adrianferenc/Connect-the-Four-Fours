@@ -108,10 +108,12 @@ footer {
 
 .pulsate {
   -webkit-animation: pulsate 1s ease-out;
+  animation: pulsate 1s ease-out;
   -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
   opacity: 0.5;
 }
-@-webkit-keyframes pulsate {
+@keyframes pulsate {
   0% {
     opacity: 0.5;
   }
