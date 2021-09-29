@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="A game loosely based on Connect Four and the Four Fours Puzzle."
+      content="A game loosely based on Connect Four and the Four Fours Puzzle. Creatd by Nick Simmons and built by Adrian Ferenc."
     />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.0/math.js"
@@ -24,8 +24,8 @@
   <body>
     <div id="pregame">
       <h1 class="display-3 fw-normal" id="title">Connect The Four Fours</h1>
-      <h2 class="display-7 fw-light">How many teams are playing?</h2>
       <div id="slider">
+        <label class="form-label" for="numberOfTeams">Number of Teams:</label>
         <input
           type="range"
           min="2"
@@ -36,7 +36,9 @@
         />
         <p id="teamCount"></p>
         <div id="setTimer">
-          <label for="timeAmount">Timer length (in minutes):</label>
+          <label class="form-label" for="timeAmount">
+            Timer length (in minutes):
+          </label>
           <input
             id="timeAmount"
             class="form-control form-control-sm"
