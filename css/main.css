@@ -1,7 +1,6 @@
 body {
   display: grid;
   justify-content: center;
-  margin-top: 2rem;
 }
 
 #footer {
@@ -16,6 +15,7 @@ body {
 }
 
 #title {
+  margin-top: 2rem;
   margin-bottom: 3rem;
 }
 
@@ -163,6 +163,6 @@ body {
     justify-content: center;
   }
   .box {
-    font-size: .5rem;
+    font-size: 0.5rem;
   }
 }

@@ -68,7 +68,7 @@ const playedNumbers = {};
 const currentRoll = [];
 const directions = ["left", "up", "upleft", "downleft"];
 
-//state variables
+// //state variables
 let numOfTeams,
   turn,
   updatedConnected,
@@ -84,6 +84,7 @@ const diceContainer = document.querySelector("#dice");
 const colorBox = document.querySelector("#colors");
 
 //event listeners
+
 document.querySelector("#start").addEventListener("click", startGame);
 
 diceContainer.addEventListener("click", rollDice);
@@ -93,6 +94,13 @@ document.querySelector("#timeAmount").addEventListener("change", (e) => {
     ? (document.querySelector("#start").disabled = true)
     : (document.querySelector("#start").disabled = false);
 });
+
+let numberOfTeams = document.querySelector("#numberOfTeams").value;
+document.querySelector("#teamCount").innerHTML = numberOfTeams;
+document.querySelector("#numberOfTeams").oninput = function () {
+  numberOfTeams = this.value;
+  document.getElementById("teamCount").innerHTML = numberOfTeams;
+};
 
 //functions
 //init function
@@ -129,16 +137,7 @@ function initialize() {
   makeBoard();
 }
 
-function pregameRender() {
-  let numberOfTeams = document.querySelector("#numberOfTeams").value;
-  document.querySelector("#teamCount").textContent = numberOfTeams;
-  document.querySelector("#numberOfTeams").oninput = function () {
-    numberOfTeams = this.value;
-    document.getElementById("teamCount").innerHTML = numberOfTeams;
-  };
-}
-
-//render function
+// //render function
 function render() {
   const rollButton = document.createElement("button");
   rollButton.textContent = "Roll to Start";
@@ -227,25 +226,23 @@ function timerUpdate() {
   if (timer === 0) {
     let inputValue = document.querySelector("#entryBox").value;
     let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
-    if (inputValue.includes("log")) {
-      let inputValueWithLog = document.querySelector("#entryBox").value;
-      for (let i = 1; i < 15; i++) {
-        inputValueWithLog = inputValueWithLog.replace(
-          /(?<=log\(.{1})\)/g,
-          ",10)"
-        );
-      }
-      inputNumber = math.evaluate(inputValueWithLog);
-    }
+    // if (inputValue.includes("log")) {
+    //   const matchLength = document
+    //     .querySelector("#entryBox")
+    //     .value.match(/(?<=log\().+?(?=\))/g)[0].length;
+    //   const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
+    //   inputNumber = math.evaluate(
+    //     document.querySelector("#entryBox").value.replace(re, `,10`)
+    //   );
+    // }
     if (
       inputNumber % 1 === 0 &&
       inputNumber < 101 &&
       inputNumber > 0 &&
       !Object.keys(playedNumbers).includes(`#box${inputNumber}`) &&
-      inputValue
-        .match(/(?<!\d)\d(?!\d)/gm)
-        .sort()
-        .join("") === [...currentRoll].sort().join("")
+      inputValue.match(/^\D*\d\D+\d\D+\d\D+\d\D*$/gm)[0] === inputValue &&
+      inputValue.match(/\d/gm).sort().join("") !==
+        [...currentRoll].sort().join("")
     ) {
       numberSubmit();
     } else {
@@ -257,24 +254,19 @@ function timerUpdate() {
 }
 
 function numberEvaluate() {
-  let inputValue, inputNumber;
   document.getElementById("errorField").textContent = "";
   if (timer > 0) {
-    try {
-      inputValue = document.querySelector("#entryBox").value;
-      inputNumber = math.evaluate(document.querySelector("#entryBox").value);
-      if (inputValue.includes("log")) {
-        const matchLength = document
-          .querySelector("#entryBox")
-          .value.match(/(?<=log\().+?(?=\))/g)[0].length;
-        const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
-        inputNumber = math.evaluate(
-          document.querySelector("#entryBox").value.replace(re, `,10`)
-        );
-      }
-    } catch (err) {
-      inputNumber = null;
-    }
+    let inputValue = document.querySelector("#entryBox").value;
+    let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
+    // if (inputValue.includes("log")) {
+    //   const matchLength = document
+    //     .querySelector("#entryBox")
+    //     .value.match(/(?<=log\().+?(?=\))/g)[0].length;
+    //   const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
+    //   inputNumber = math.evaluate(
+    //     document.querySelector("#entryBox").value.replace(re, `,10`)
+    //   );
+    // }
     if (inputNumber === undefined) {
       document.getElementById("errorField").textContent =
         "You must enter a number";
@@ -293,10 +285,9 @@ function numberEvaluate() {
         "errorField"
       ).textContent = `${inputNumber} has already been played`;
     } else if (
-      inputValue
-        .match(/(?<!\d)\d(?!\d)/gm)
-        .sort()
-        .join("") !== [...currentRoll].sort().join("")
+      inputValue.match(/^\D*\d\D+\d\D+\d\D+\d\D*$/gm)[0] === inputValue &&
+      inputValue.match(/\d/gm).sort().join("") !==
+        [...currentRoll].sort().join("")
     ) {
       document.getElementById(
         "errorField"
@@ -314,15 +305,15 @@ function numberEvaluate() {
 
 function numberSubmit() {
   let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
-  if (document.querySelector("#entryBox").value.includes("log")) {
-    const matchLength = document
-      .querySelector("#entryBox")
-      .value.match(/(?<=log\().+?(?=\))/g)[0].length;
-    const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
-    inputNumber = math.evaluate(
-      document.querySelector("#entryBox").value.replace(re, `,10`)
-    );
-  }
+  //   if (document.querySelector("#entryBox").value.includes("log")) {
+  //     const matchLength = document
+  //       .querySelector("#entryBox")
+  //       .value.match(/(?<=log\().+?(?=\))/g)[0].length;
+  //     const re = new RegExp(`(?<=log\(.{${matchLength + 1}})\)`, "g");
+  //     inputNumber = math.evaluate(
+  //       document.querySelector("#entryBox").value.replace(re, `,10`)
+  //     );
+  //   }
   let played = new PlayedSquare(`#box${inputNumber}`, turn % numOfTeams);
   playedNumbers[played.id] = played;
   document.querySelector(`#box${inputNumber}`).style.color = "white";
@@ -333,7 +324,7 @@ function numberSubmit() {
     return (document.body.innerHTML = `<h1>Team ${
       (turn % numOfTeams) + 1
     } Wins!</h1>
-    
+
     <button class="btn btn-warning btn-lg" onClick = "window.location.reload()">Play Again</button>
     `);
   }
@@ -393,5 +384,3 @@ function checkWin(id) {
   }
   return false;
 }
-
-pregameRender();
