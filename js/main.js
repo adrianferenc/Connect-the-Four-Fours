@@ -257,7 +257,6 @@ function numberEvaluate() {
   document.getElementById("errorField").textContent = "";
   if (timer > 0) {
     let inputValue = document.querySelector("#entryBox").value;
-    console.log(!!inputValue.match(/^\D*\d{1}\D+\d{1}\D+\d{1}\D+\d{1}\D*$/gm))
     let inputNumber = math.evaluate(document.querySelector("#entryBox").value);
     // if (inputValue.includes("log")) {
     //   const matchLength = document
@@ -286,7 +285,7 @@ function numberEvaluate() {
         "errorField"
       ).textContent = `${inputNumber} has already been played`;
     } else if (
-      !inputValue.match(/^\D*\d{1}\D+\d{1}\D+\d{1}\D+\d{1}\D*$/gm) &&
+      !inputValue.match(/^\D*\d{1}\D+\d{1}\D+\d{1}\D+\d{1}\D*$/gm) ||
       inputValue.match(/\d/gm).sort().join("") !==
         [...currentRoll].sort().join("")
     ) {
